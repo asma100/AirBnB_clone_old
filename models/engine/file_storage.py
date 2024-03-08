@@ -2,6 +2,13 @@
 """Storage for AirBnb clone"""
 
 import json
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class FileStorage:
@@ -10,6 +17,8 @@ class FileStorage:
     """
     __filePath = "file.json"
     __objects = {}
+    definedClasses = {'BaseModel': BaseModel,'User':User,'State': State,'City': City,'Amenity': Amenity,'Place': Place,'Review': Review }
+
     def all(self):
         """Returns the dictionary of objects"""
         return FileStorage.__objects
@@ -29,20 +38,11 @@ class FileStorage:
 
     def reload(self):
         """Deserializes the JSON file to objects"""
-        from models.base_model import BaseModel
-        from models.user import User
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.place import Place
-        from models.review import Review
-        definedClasses = {'BaseModel': BaseModel,'user':User,'State': State,'City': City,'Amenity': Amenity,'Place': Place,'Review': Review }
         try:
-            with open(FileStorage.__filePath, encoding="utf-8") as jsonStr:
-                deserialized = json.load(jsonStr)
-                for obj_values in deserialized.values():
-                    clsName = obj_values["__class__"]
-                    cls_obj = definedClasses[clsName]
-                    self.new(cls_obj(**obj_values))
+            with open(self.__filePath, encoding="utf-8") as fi:
+                objdict = json.loads(fi.read())
+            for  value in objdict.values():
+                clsName = value["__class__"]
+                self.new(eval(clsName)(**value))
         except FileNotFoundError:
             pass
