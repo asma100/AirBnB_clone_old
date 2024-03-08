@@ -2,10 +2,8 @@
 """Defines the Console class"""
 
 import cmd
-#import models
 import sys
 
-#from models.base_model import BaseModel
 from models import storage
 from models.base_model import BaseModel
 from models.state import State
@@ -18,12 +16,18 @@ from models.user import User
 
 class HBNBCommand(cmd.Cmd):
     """
-    Command Interperter
+    Command Interperter.
     """
     prompt = "(hbnb) "
-    classes = ["BaseModel", "User", "State", "City", "Amentity", "Place", "Review"]
+    classes = ["BaseModel",
+               "User",
+               "State",
+               "City",
+               "Amentity",
+               "Place",
+               "Review"]
 
-    def do_quit(self,arg):
+    def do_quit(self, arg):
         """ Quit command to exit the program"""
         return True
 
@@ -35,8 +39,6 @@ class HBNBCommand(cmd.Cmd):
     def handle_empty_lines(self, arg):
         """passes empty lines"""
         return False
-
-
 
     def do_create(self, arg):
         """Create a new instance of BaseModel"""
@@ -126,14 +128,15 @@ class HBNBCommand(cmd.Cmd):
             print([str(instance) for instance in instances.values()])
         elif args:
             if args[0] in HBNBCommand.classes:
-                    object_list = [str(instance) for instance in instances.values()
-                            if instance.__class__.__name__ == args[0]]
-                    if object_list:
-                        print(object_list)
-                    else:
-                        print("[]")
+                object_list = [str(instance) for instance in instances.values()
+                               if instance.__class__.__name__ == args[0]]
+                if object_list:
+                    print(object_list)
+                else:
+                    print("[]")
             else:
                 print("** class doesn't exist **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
