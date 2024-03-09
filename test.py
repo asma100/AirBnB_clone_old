@@ -1,51 +1,54 @@
-#!/usr/bin/python3
-"""
-Unittest for base_model
-"""
-
 import unittest
-import models
-from models.base_model import BaseModel
-from datetime import datetime
-class TestBaseModel(unittest.TestCase):
+from models.engine.file_storage import FileStorage
+from models.user import User
+from models.place import Place  
+
+class TestFileStorage(unittest.TestCase):
     """
-    Test class for the BaseModel class
-    """
+    Test class for the FileStorage class
+    """  
     def setUp(self):
         """
         Set up method that runs before each test
         """
-        self.base_model = BaseModel()
+        self.storage = FileStorage()  
+    def test_all(self):
+        """
+        Test if the FileStorage class is initialized properly
+        """
+        self.assertEqual(self.storage.all(), {})
+    def test_new(self):
+        """
+        Test if the FileStorage class is initialized properly
+        """
+        user = User(**{"email": "tugrp@example.com"})
+        self.storage.new(user)
+        self.assertEqual(self.storage.all(), {"User.1": user})
+    def test_save(self):
+        """
+        Test if the FileStorage class is initialized properly
+        """
+        self.storage.new(User, "user_id", {"email": "tugrp@example.com"})
+        self.storage.save()
+        self.assertEqual(self.storage.all(), {"user_id": {"email": "tugrp@example.com"}})
+    def test_reload(self):
+        """
+        Test if the FileStorage class is initialized properly
+        """
+        self.storage.new(User, "user_id", {"email": "tugrp@example.com"})
+        self.storage.save()
+        self.storage.reload()
+        self.assertEqual(self.storage.all(), {"user_id": {"email": "tugrp@example.com"}})
+    def test_delete(self):
+        """
+        Test if the FileStorage class is initialized properly
+        """
+        self.storage.new(User, "user_id", {"email": "tugrp@example.com"})
+        self.storage.save()
+        self.storage.delete("user_id")
+        self.assertEqual(self.storage.all(), {})
     
-    def test_two_amenities_unique_ids(self):
-        """
-        Test if the two amenities have different ids
-        """
-        a1 = BaseModel()
-        a2 = BaseModel()
-        self.assertNotEqual(a1.id, a2.id)
-    def test_create_time_type(self):
-        """
-        Test if the created_at attribute is a datetime object
-        """
-        self.assertIsInstance(self.base_model.created_at, datetime)
-    def test_update_time_type(self):
-        """
-        Test if the updated_at attribute is a datetime object
-        """
-        self.assertIsInstance(self.base_model.updated_at, datetime)
-    def test_str_method(self):
-        """Tests method is printing """
-        b1 = BaseModel()
-        b1printed = b1.__str__()
-        self.assertEqual(b1printed,
-                         "[BaseModel] ({}) {}".format(b1.id, b1.__dict__))
-    def test_attribute(self):
-        """Tests if the instance of BaseModel have been correctly made"""
-        self.assertTrue(hasattr(self.base_model, "__init__"))
-        self.assertTrue(hasattr(self.base_model, "created_at"))
-        self.assertTrue(hasattr(self.base_model, "updated_at"))
-        self.assertTrue(hasattr(self.base_model, "id"))
+      
 
 if __name__ == '__main__':
     unittest.main()
