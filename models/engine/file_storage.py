@@ -25,16 +25,16 @@ class FileStorage:
                       'Place': Place,
                       'Review': Review}
 
-    def all(FileStorage):
+    def all(self):
         """Returns the dictionary of objects"""
         return FileStorage.__objects
 
-    def new(FileStorage, obj):
+    def new(self, obj):
         """Sets in objects the obj with key"""
         key = obj.__class__.__name__ + "." + obj.id
         FileStorage.__objects[key] = obj
 
-    def save(FileStorage):
+    def save(self):
         """Serializes objects to JSON file"""
         dictObj = {}
         for key, val in FileStorage.__objects.items():
@@ -42,7 +42,7 @@ class FileStorage:
             with open(FileStorage.__filePath, "w", encoding="utf-8") as jsonF:
                 json.dump(dictObj, jsonF)
 
-    def reload(FileStorage):
+    def reload(self):
         """Deserializes the JSON file to objects"""
         try:
             with open(FileStorage.__filePath, encoding="utf-8") as fi:
