@@ -14,8 +14,8 @@ class TestAmenity(unittest.TestCase):
         """
         Test if the City class is initialized properly
         """
-        self.city.state_id = "city_id"
-        self.assertEqual(self.city.state_id, "city_id")
+        self.city.state_id = "state_id"
+        self.assertEqual(self.city.state_id, "state_id")
     def test_state_id_str(self):
         """
         Test if the City class is stringified properly
