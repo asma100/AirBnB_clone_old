@@ -1,43 +1,43 @@
 #!/usr/bin/python3
-"""test City class"""
+"""test amenity class"""
 import unittest
-from models.city import City
+from models.amenity import Amenity
 from datetime import datetime
 class TestAmenity(unittest.TestCase):
     """
-    Test class for the City class
+    Test class for the Amenity class
     """
     def setUp(self):
-        """Create a City instance before each test method."""
-        self.city = City()
-    def test_city_id(self):
+        """Create a Amenity instance before each test method."""
+        self.amenity = Amenity()
+    def test_name(self):
         """
-        Test if the City class is initialized properly
+        Test if the Amenity class is initialized properly
         """
-        self.city.state_id = "state_id"
-        self.assertEqual(self.city.state_id, "state_id")
-    def test_city_id_str(self):
+        self.amenity.name = "name"
+        self.assertEqual(self.amenity.name, "name")
+    def test_name_str(self):
         """
-        Test if the City class is stringified properly
+        Test if the Amenity class is stringified properly
         """
-        self.assertEqual(str, type(self.city.state_id))
-    def test_two_cities_unique_ids(self):
+        self.assertEqual(str, type(self.amenity.name))
+    def test_two_amenities_unique_ids(self):
         """
-        Test if the two cities have different ids
+        Test if the two amenities have different ids
         """
-        a1 = City()  
-        a2 = City()
+        a1 = Amenity()
+        a2 = Amenity()
         self.assertNotEqual(a1.id, a2.id)
     def test_create_time_type(self):
         """
         Test if the created_at attribute is a datetime object
         """
-        self.assertIsInstance(self.city.created_at, datetime)
+        self.assertIsInstance(self.amenity.created_at, datetime)
     def test_update_time_type(self):
         """
-        Test if the updated_at attribute is a datetime object 
+        Test if the updated_at attribute is a datetime object
         """
-        self.assertIsInstance(self.city.updated_at, datetime) 
+        self.assertIsInstance(self.amenity.updated_at, datetime)
 
 
 
