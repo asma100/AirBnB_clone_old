@@ -36,9 +36,9 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
-    def handle_empty_lines(self, arg):
+    def emptyline(self):
         """passes empty lines"""
-        return False
+        return
 
     def do_create(self, arg):
         """Create a new instance of BaseModel"""
