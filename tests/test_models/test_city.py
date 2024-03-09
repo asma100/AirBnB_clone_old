@@ -1,5 +1,5 @@
 ##!/usr/bin/python3
-"""test City class""""
+"""test City class"""
 import unittest
 from models.city import City
 from datetime import datetime 
