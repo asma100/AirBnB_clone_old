@@ -21,8 +21,6 @@ class BaseModel():
                 if key == "created_at" or key == "updated_at":
                     setattr(self, key,
                             datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f'))
-                elif key[0] == "id":
-                    self.__dict__[key] = str(value)
                 else:
                     setattr(self, key, value)
         else:
@@ -42,10 +40,11 @@ class BaseModel():
         models.storage.save()
 
     def to_dict(self):
-        """returns a dictionary containing all keys/values"""
-        dict = {}
-        dict = self.__dict__.copy()
-        dict["__class__"] = self.__class__.__name__
-        dict["created_at"] = self.created_at.isoformat()
-        dict["updated_at"] = self.updated_at.isoformat()
-        return dict
+        map_objects = {}
+        for key, value in self.__dict__.items():
+            if key == "created_at" or key == "updated_at":
+                map_objects[key] = value.isoformat()
+            else:
+                map_objects[key] = value
+        map_objects["__class__"] = self.__class__.__name__
+        return map_objects
