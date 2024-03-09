@@ -99,41 +99,53 @@ class HBNBCommand(cmd.Cmd):
 
 
     def do_update(self, arg):
-        """Updates an instance based on the class name and id"""
-        try:
-            if not arg:
-                raise SyntaxError()
-            my_list = split(arg, " ")
-            if my_list[0] not in HBNBCommand.classes:
-                raise NameError()
-            if len(my_list) < 2:
-                raise IndexError()
-            objects = storage.all()
-            key = my_list[0] + '.' + my_list[1]
-            if key not in objects:
-                raise KeyError()
-            if len(my_list) < 3:
-                raise AttributeError()
-            if len(my_list) < 4:
-                raise ValueError()
-            v = objects[key]
-            try:
-                v.__dict__[my_list[2]] = eval(my_list[3])
-            except Exception:
-                v.__dict__[my_list[2]] = my_list[3]
-                v.save()
-        except SyntaxError:
+        """Usage: update <class> <id> <attribute_name> <attribute_value> or
+       <class>.update(<id>, <attribute_name>, <attribute_value>) or
+       <class>.update(<id>, <dictionary>)
+        Update a class instance of a given id by adding or updating
+        a given attribute key/value pair or dictionary."""
+        args = arg.split()
+        objdict = storage.all()
+
+        if len(args) == 0:
             print("** class name missing **")
-        except NameError:
+            return False
+        if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        except IndexError:
+            return False
+        if len(args) == 1:
             print("** instance id missing **")
-        except KeyError:
+            return False
+        if "{}.{}".format(args[0], args[1]) not in objdict.keys():
             print("** no instance found **")
-        except AttributeError:
+            return False
+        if len(args) == 2:
             print("** attribute name missing **")
-        except ValueError:
-            print("** value missing **")
+            return False
+        if len(args) == 3:
+            try:
+                type(eval(args[2])) != dict
+            except NameError:
+                print("** value missing **")
+                return False
+
+        if len(args) == 4:
+            obj = objdict["{}.{}".format(args[0], args[1])]
+            if args[2] in obj.__class__.__dict__.keys():
+                valtype = type(obj.__class__.__dict__[args[2]])
+                obj.__dict__[args[2]] = valtype(args[3])
+            else:
+                obj.__dict__[args[2]] = args[3]
+        elif type(eval(args[2])) == dict:
+            obj = objdict["{}.{}".format(args[0], args[1])]
+            for k, v in eval(args[2]).items():
+                if (k in obj.__class__.__dict__.keys() and
+                        type(obj.__class__.__dict__[k]) in {str, int, float}):
+                    valtype = type(obj.__class__.__dict__[k])
+                    obj.__dict__[k] = valtype(v)
+                else:
+                    obj.__dict__[k] = v
+        storage.save()
 
     def do_all(self, arg):
         """Prints all string representation of all instances"""
