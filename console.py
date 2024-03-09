@@ -35,6 +35,7 @@ class HBNBCommand(cmd.Cmd):
         """Quit command to exit the program"""
         print()
         return True
+
     def handle_empty_lines(self, arg):
         """passes empty lines"""
         return False
