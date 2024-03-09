@@ -2,7 +2,6 @@
 """test review class"""  
 import unittest
 from models.review import Review
-from models.engine.file_storage import FileStorage
 class TestReview(unittest.TestCase):
     """
     Test class for the Review class

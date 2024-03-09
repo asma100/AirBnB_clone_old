@@ -38,4 +38,3 @@ class TestAmenity(unittest.TestCase):
         Test if the updated_at attribute is a datetime object 
         """
         self.assertIsInstance(self.city.updated_at, datetime)
-
