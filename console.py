@@ -69,6 +69,8 @@ class HBNBCommand(cmd.Cmd):
             dict = storage.all()
             if len(args) >= 2:
                 key = args[0] + '.' + args[1]
+                if key is None:
+                    return
                 if key in dict:
                     print(storage.all()[key])
                 else:
