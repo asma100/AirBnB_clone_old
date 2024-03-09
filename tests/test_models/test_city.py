@@ -13,7 +13,7 @@ class TestAmenity(unittest.TestCase):
         """
         self.city = City()
         self.assertEqual(self.city.city_id, "")
-        d
+        
         
 
 
