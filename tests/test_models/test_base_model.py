@@ -42,6 +42,8 @@ class TestBaseModel(unittest.TestCase):
                          "[BaseModel] ({}) {}".format(b1.id, b1.__dict__))
     def test_attribute(self):
         """Tests if the instance of BaseModel have been correctly made"""
+        self.assertTrue(hasattr(self.base_model, "__init__"))
         self.assertTrue(hasattr(self.base_model, "created_at"))
         self.assertTrue(hasattr(self.base_model, "updated_at"))
         self.assertTrue(hasattr(self.base_model, "id"))
+        
