@@ -87,3 +87,4 @@ class TestPlace(unittest.TestCase):
     def test_amenity_ids_list(self):
         """Test if the amenity_ids attribute is stringified properly."""  
         self.assertEqual(list, type(self.place.amenity_ids))
+        d

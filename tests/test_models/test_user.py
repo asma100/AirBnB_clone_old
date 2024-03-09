@@ -38,3 +38,4 @@ class TestUser(unittest.TestCase):
         a1 = User()
         a2 = User()
         self.assertNotEqual(a1.id, a2.id)
+        d
