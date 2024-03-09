@@ -1,40 +1,43 @@
 #!/usr/bin/python3
-"""test state class"""  
-import unittest  
-from models.state import State
+"""test City class"""
+import unittest
+from models.city import City
 from datetime import datetime
-class TestState(unittest.TestCase):
+class TestAmenity(unittest.TestCase):
     """
-    Test class for the State class
+    Test class for the City class
     """
     def setUp(self):
-      """Create a State instance before each test method."""  
-      self.state = State()  
-    def test_name (self):
+        """Create a City instance before each test method."""
+        self.city = City()
+    def test_city_id(self):
         """
-        Test if the State class is initialized properly
+        Test if the City class is initialized properly
         """
-        self.state.name = "name"
-        self.assertEqual(self.state.name, "name")
-    def test_name_str(self):
+        self.city.state_id = "state_id"
+        self.assertEqual(self.city.state_id, "state_id")
+    def test_city_id_str(self):
         """
-        Test if the State class is stringified properly  
+        Test if the City class is stringified properly
         """
-        self.assertEqual(str, type(self.state.name))
-    def test_two_state_unique_ids(self):
-        a1 = State()
-        a2 = State()
+        self.assertEqual(str, type(self.city.state_id))
+    def test_two_cities_unique_ids(self):
+        """
+        Test if the two cities have different ids
+        """
+        a1 = City()  
+        a2 = City()
         self.assertNotEqual(a1.id, a2.id)
     def test_create_time_type(self):
         """
         Test if the created_at attribute is a datetime object
         """
-        self.assertIsInstance(self.state.created_at, datetime)
+        self.assertIsInstance(self.city.created_at, datetime)
     def test_update_time_type(self):
         """
         Test if the updated_at attribute is a datetime object 
         """
-        self.assertIsInstance(self.state.updated_at, datetime)
+        self.assertIsInstance(self.city.updated_at, datetime) 
 
 
 
