@@ -10,17 +10,17 @@ class TestAmenity(unittest.TestCase):
     def setUp(self):
         """Create a City instance before each test method."""
         self.city = City()
-    def test_city_id(self):
+    def test_state_id(self):
         """
         Test if the City class is initialized properly
         """
-        self.city.city_id = "city_id"
-        self.assertEqual(self.city.city_id, "city_id")
-    def test_city_id_str(self):
+        self.city.state_id = "city_id"
+        self.assertEqual(self.city.state_id, "city_id")
+    def test_state_id_str(self):
         """
         Test if the City class is stringified properly
         """
-        self.assertEqual(str, type(self.city.city_id))
+        self.assertEqual(str, type(self.city.state_id))
     def test_two_cities_unique_ids(self):
         """
         Test if the two cities have different ids
@@ -37,4 +37,4 @@ class TestAmenity(unittest.TestCase):
         """
         Test if the updated_at attribute is a datetime object 
         """
-        self.assertIsInstance(self.city.updated_at, datetime) 
+        self.assertIsInstance(self.city.updated_at, datetime)
