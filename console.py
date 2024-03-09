@@ -59,24 +59,20 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 0:
             print("** class name missing **")
             return
-        if len(args) < 2:
-            if len(args) == 1 and args[0] not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-            else:
-                print("** instance id is missing **")
-            return
         if args[0] not in HBNBCommand.classes:
-            if len(args) >= 2:
-                print("** no instance found")
-        if args[0] in HBNBCommand.classes:
-            dict = storage.all()
-            if len(args) >= 2:
-                key = args[0] + '.' + args[1]
-                if key in dict:
-                    print(storage.all()[key])
-                else:
-                    print("** no instance found **")
-                    return
+            print("** class doesn't exist **")
+            return
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        key = args[0] + '.' + args[1]
+        obj_dict = storage.all()
+        if key not in obj_dict:
+            print("** no instance found **")
+        else:
+            print(obj_dict[key])
+
 
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id"""
@@ -84,18 +80,23 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
         elif len(args) == 1:
-            print("** instance id missing **")
+            if args[0] not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+            else:
+                print("** instance id missing **")
         else:
             class_name, instance_id = args[0], args[1]
             if args[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
             key = f"{class_name}.{instance_id}"
-            if key in storage.all():
-                del storage.all()[key]
+            obj_dict = storage.all()
+            if key in obj_dict:
+                del obj_dict[key]
                 storage.save()
             else:
                 print("** no instance found **")
+
 
     def do_update(self, arg):
         """Updates an instance based on the class name and id"""
