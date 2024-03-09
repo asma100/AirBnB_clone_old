@@ -1,40 +1,82 @@
-#!/usr/bin/python3
-"""test amenity class"""
+#!/usr/bin/env python3
+"""Unittest module for the Amenity Class."""
+
 import unittest
+import os
 from models.amenity import Amenity
-from datetime import datetime
+from models.base_model import BaseModel
+import uuid
+import datetime
+import time
+import re
+import json
+from models.engine.file_storage import FileStorage
+from models import storage
+
 class TestAmenity(unittest.TestCase):
-    """
-    Test class for the Amenity class
-    """
-    def setUp(self):
-        """Create a Amenity instance before each test method."""
-        self.amenity = Amenity()
-    def test_name(self):
-        """
-        Test if the Amenity class is initialized properly
-        """
-        self.amenity.name = "name"
-        self.assertEqual(self.amenity.name, "name")
-    def test_name_str(self):
-        """
-        Test if the Amenity class is stringified properly
-        """
-        self.assertEqual(str, type(self.amenity.name))
-    def test_two_amenities_unique_ids(self):
-        """
-        Test if the two amenities have different ids
-        """
-        a1 = Amenity()
-        a2 = Amenity()
-        self.assertNotEqual(a1.id, a2.id)
-    def test_create_time_type(self):
-        """
-        Test if the created_at attribute is a datetime object
-        """
-        self.assertIsInstance(self.amenity.created_at, datetime)
-    def test_update_time_type(self):
-        """
-        Test if the updated_at attribute is a datetime object
-        """
-        self.assertIsInstance(self.amenity.updated_at, datetime)
+    """Amenity model class test case"""
+
+    @classmethod
+    def setUpClass(cls):
+        """Setup the unittest"""
+        cls.amenity = Amenity()
+        cls.amenity.name = "Wifi"
+
+    @classmethod
+    def tearDownClass(cls):
+        """Clean up the dirt"""
+        del cls.amenity
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
+
+    def test_is_subclass(self):
+        self.assertTrue(issubclass(self.amenity.__class__, BaseModel))
+
+    def checking_for_doc(self):
+        self.assertIsNotNone(Amenity.__doc__)
+
+    # def test_has_attributes(self):
+    #    self.assertTrue('id' in self.amenity.__dict__)
+    #    self.assertTrue('created_at' in self.amenity.__dict__)
+    #    self.assertTrue('updated_at' in self.amenity.__dict__)
+    #    self.assertTrue('name' in self.amenity.__dict__)
+    # OR
+    a = Amenity()
+    def test_has_attributes(self):
+        """verify if attributes exist"""
+        self.assertTrue(hasattr(self.a, 'name'))
+        self.assertTrue(hasattr(self.a, 'id'))
+        self.assertTrue(hasattr(self.a, 'created_at'))
+        self.assertTrue(hasattr(self.a, 'updated_at'))
+
+    def test_attributes_are_string(self):
+        self.assertIs(type(self.amenity.name), str)
+
+    def test_class_exists(self):
+        """tests if class exists"""
+        res = "<class 'models.amenity.Amenity'>"
+        self.assertEqual(str(type(self.a)), res)
+
+    def test_user_inheritance(self):
+        """test if Amenity is a subclass of BaseModel"""
+        self.assertIsInstance(self.a, Amenity)
+
+    def test_types(self):
+        """tests if the type of the attribute is the correct one"""
+        self.assertIsInstance(self.a.name, str)
+        self.assertIsInstance(self.a.id, str)
+        self.assertIsInstance(self.a.created_at, datetime.datetime)
+        self.assertIsInstance(self.a.updated_at, datetime.datetime)
+
+    def test_save(self):
+        self.amenity.save()
+        self.assertNotEqual(self.amenity.created_at, self.amenity.updated_at)
+
+    def test_to_dict(self):
+        self.assertTrue('to_dict' in dir(self.amenity))
+
+
+if __name__ == "__main__":
+    unittest.main()
