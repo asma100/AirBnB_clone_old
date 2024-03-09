@@ -1,5 +1,7 @@
-from models.base_model import BaseModel
+#!/usr/bin/python3
 """Review  Model """
+
+from models.base_model import BaseModel
 
 
 class Review(BaseModel):
