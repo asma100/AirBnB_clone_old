@@ -101,46 +101,27 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """Updates an instance based on the class name and id"""
         args = arg.split()
-        if len(args) < 2:
+        if len(args) == 0:
             print("** class name missing **")
-            return
-        class_name = args[0]
-        if class_name not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        if len(args) < 3:
-            print("** instance id missing **")
-            return
-        instance_id = args[1]
-        key = class_name + '.' + instance_id
-        dictionary = storage.all()
-        if key not in dictionary:
-            print("** no instance found **")
-            return
-        if len(args) < 4:
+        if len(args) == 1:
+            print("** instance id is missing **")
+        if len(args) == 2:
             print("** attribute name missing **")
-            return
-        attr_name = args[2]
-        if len(args) < 5:
+        if len(args) == 3:
             print("** value missing **")
-            return
-        attr_value_str = args[3]
-        instance = dictionary[key]
-        if attr_name in ['id', 'created_at', 'updated_at']:
-            print("** can't update id, created_at or updated_at **")
-            return
-        if not hasattr(instance, attr_name):
-            print(f"** attribute '{attr_name}' doesn't exist for {class_name} **")
-            return
-        attr_type = type(getattr(instance, attr_name))
-        try:
-            attr_value = attr_type(attr_value_str)
-        except ValueError:
-            print(f"** can't cast value '{attr_value_str}' to {attr_type} **")
-            return
-        setattr(instance, attr_name, attr_value)
-        instance.save()
-
+        if len(args) == 4:
+            class_name, instance_id, attr_name, attr_value = args[:4]
+            if class_name in HBNBCommand.classes:
+                dictionary = storage.all()
+                if len(args) >= 2:
+                    key = class_name + '.' + instance_id
+                    if key in dictionary:
+                        dictionary[key].__dict__[attr_name] = attr_value
+                        dictionary[key].save()
+                    else:
+                        print("** no instance found **")
+            else:
+                print("** class doesn't exist **")
 
     def do_all(self, arg):
         """Prints all string representation of all instances"""
