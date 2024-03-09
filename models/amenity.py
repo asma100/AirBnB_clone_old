@@ -1,9 +1,12 @@
-from models.base_model import BaseModel
 """Amenity  Model """
+from models.base_model import BaseModel
+
+
 class Amenity(BaseModel):
     """Represnts the Amenity model"""
     name = " "
-  def do_update(self, arg):
+
+    def do_update(self, arg):
         """Updates an instance based on the class name and id"""
         args = arg.split()
         if len(args) == 0:
