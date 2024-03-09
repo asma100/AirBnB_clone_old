@@ -21,6 +21,8 @@ class BaseModel():
                 if key == "created_at" or key == "updated_at":
                     setattr(self, key,
                             datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f'))
+                elif key[0] == "id":
+                    self.__dict__[key] = str(value)
                 else:
                     setattr(self, key, value)
         else:
