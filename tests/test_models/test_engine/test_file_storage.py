@@ -44,7 +44,8 @@ class TestFileStorage(unittest.TestCase):
             json_file.write("")
         self.storage.reload()
         self.assertEqual(self.storage.all(), {})
-
+    
+      
 
 if __name__ == '__main__':
     unittest.main()
