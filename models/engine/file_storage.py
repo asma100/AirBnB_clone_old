@@ -15,7 +15,7 @@ class FileStorage:
     """
     Class that serializes and deserializes a dictionary to a JSON file
     """
-    __filePath = "file.json"
+    __file_path = "file.json"
     __objects = {}
     definedClasses = {'BaseModel': BaseModel,
                       'User': User,
@@ -45,10 +45,10 @@ class FileStorage:
     def reload(self):
         """Deserializes the JSON file to objects"""
         try:
-            with open(self.__file_path, 'r', encoding="UTF-8") as f:
-                new_obj_dict = json.load(f)
-            for key, value in new_obj_dict.items():
-                obj = self.definedClasses[value['__class__']](**value)
-                self.__objects[key] = obj
+            with open(self.__file_path, encoding="utf-8") as fi:
+                objdict = json.loads(fi.read())
+            for value in objdict.values():
+                clsName = value["__class__"]
+                self.new(eval(clsName)(**value))
         except FileNotFoundError:
             pass
