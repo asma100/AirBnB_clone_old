@@ -18,34 +18,31 @@ class TestFileStorage(unittest.TestCase):
         """
         self.assertEqual(self.storage.all(), {})
     def test_new(self):
-        """
-        Test if the FileStorage class is initialized properly
-        """
-        user = User(**{"email": "tugrp@example.com"})
+        """Test if the new method adds an object to the dictionary"""
+        user = User()
         self.storage.new(user)
-        self.assertEqual(self.storage.all(), {"User.1": user})
-    def test_save(self):
-        """
-        Test if the FileStorage class is initialized properly
-        """
-        self.storage.new(User, "user_id", {"email": "tugrp@example.com"})
+        key = "User." + str(user.id)
+        self.assertEqual(self.storage.all(), {key: user})
+    def test_save_reload(self):
+        """Test if save and reload methods work correctly"""
+        user = User()
+        self.storage.new(user)
         self.storage.save()
-        self.assertEqual(self.storage.all(), {"user_id": {"email": "tugrp@example.com"}})
-    def test_reload(self):
-        """
-        Test if the FileStorage class is initialized properly
-        """
-        self.storage.new(User, "user_id", {"email": "tugrp@example.com"})
-        self.storage.save()
+        new_storage = FileStorage()
+        new_storage.reload()
+        key = "User." + str(user.id)
+        self.assertEqual(new_storage.all(), {key: user})
+
+    def test_reload_file_not_found(self):
+        """Test if reload handles FileNotFoundError correctly"""
         self.storage.reload()
-        self.assertEqual(self.storage.all(), {"user_id": {"email": "tugrp@example.com"}})
-    def test_delete(self):
-        """
-        Test if the FileStorage class is initialized properly
-        """
-        self.storage.new(User, "user_id", {"email": "tugrp@example.com"})
-        self.storage.save()
-        self.storage.delete("user_id")
+        self.assertEqual(self.storage.all(), {})
+
+    def test_reload_empty_file(self):
+        """Test if reload handles an empty JSON file correctly"""
+        with open(FileStorage._FileStorage__file_path, "w") as json_file:
+            json_file.write("")
+        self.storage.reload()
         self.assertEqual(self.storage.all(), {})
     
       
