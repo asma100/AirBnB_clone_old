@@ -1,47 +1,108 @@
 #!/usr/bin/python3
-"""test amenity class"""
+"""Defines unittests for models/engine/file_storage.py.
+Unittest classes:
+    TestFileStorage_instantiation
+    TestFileStorage_methods
+"""
+import os
+import json
+import models
 import unittest
-from models.amenity import Amenity
 from datetime import datetime
-class TestAmenity(unittest.TestCase):
-    """
-    Test class for the Amenity class
-    """
+from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
+from models.user import User
+from models.state import State
+from models.place import Place
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+
+
+class TestFileStorage_instantiation(unittest.TestCase):
+    """Unittests for testing instantiation of the FileStorage class."""
+
+    def test_FileStorage_instantiation_no_args(self):
+        self.assertEqual(type(FileStorage()), FileStorage)
+
+    def test_FileStorage_instantiation_with_arg(self):
+        with self.assertRaises(TypeError):
+            FileStorage(None)
+
+    def test_FileStorage_file_path_is_private_str(self):
+        self.assertEqual(str, type(FileStorage._FileStorage__file_path))
+
+    def testFileStorage_objects_is_private_dict(self):
+        self.assertEqual(dict, type(FileStorage._FileStorage__objects))
+
+    def test_storage_initializes(self):
+        self.assertEqual(type(models.storage), FileStorage)
+
+
+class TestFileStorage_methods(unittest.TestCase):
+    """Unittests for testing methods of the FileStorage class."""
+
+    @classmethod
     def setUp(self):
-        """Create a Amenity instance before each test method."""
-        self.amenity = Amenity()
-    def test_name(self):
-        """
-        Test if the Amenity class is initialized properly
-        """
-        self.amenity.name = "name"
-        self.assertEqual(self.amenity.name, "name")
-    def test_name_at_start (self):
-        self.assertEqual(self.amenity.name, "")
-    def test_name_str(self):
-        """
-        Test if the Amenity class is stringified properly
-        """
-        self.assertEqual(str, type(self.amenity.name))
-    def test_two_amenities_unique_ids(self):
-        """
-        Test if the two amenities have different ids
-        """
-        a1 = Amenity()
-        a2 = Amenity()
-        self.assertNotEqual(a1.id, a2.id)
-    def test_create_time_type(self):
-        """
-        Test if the created_at attribute is a datetime object
-        """
-        self.assertIsInstance(self.amenity.created_at, datetime)
-    def test_update_time_type(self):
-        """
-        Test if the updated_at attribute is a datetime object
-        """
-        self.assertIsInstance(self.amenity.updated_at, datetime)
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
 
+    @classmethod
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
+        FileStorage._FileStorage__objects = {}
 
+    def test_all(self):
+        self.assertEqual(dict, type(models.storage.all()))
 
-if __name__ == '__main__':
+    def test_all_with_arg(self):
+        with self.assertRaises(TypeError):
+            models.storage.all(None)
+
+    def test_new(self):
+        bm = BaseModel()
+        us = User()
+        st = State()
+        pl = Place()
+        cy = City()
+        am = Amenity()
+        rv = Review()
+        models.storage.new(bm)
+        models.storage.new(us)
+        models.storage.new(st)
+        models.storage.new(pl)
+        models.storage.new(cy)
+        models.storage.new(am)
+        models.storage.new(rv)
+        self.assertIn("BaseModel." + bm.id, models.storage.all().keys())
+        self.assertIn(bm, models.storage.all().values())
+        self.assertIn("User." + us.id, models.storage.all().keys())
+        self.assertIn(us, models.storage.all().values())
+        self.assertIn("State." + st.id, models.storage.all().keys())
+        self.assertIn(st, models.storage.all().values())
+        self.assertIn("Place." + pl.id, models.storage.all().keys())
+        self.assertIn(pl, models.storage.all().values())
+        self.assertIn("City." + cy.id, models.storage.all().keys())
+        self.assertIn(cy, models.storage.all().values())
+        self.assertIn("Amenity." + am.id, models.storage.all().keys())
+        self.assertIn(am, models.storage.all().values())
+        self.assertIn("Review." + rv.id, models.storage.all().keys())
+        self.assertIn(rv, models.storage.all().values())
+
+    def test_new_with_args(self):
+        with self.assertRaises(TypeError):
+            models.storage.new(BaseModel(), 1)
+
+    
+
+if __name__ == "__main__":
     unittest.main()
