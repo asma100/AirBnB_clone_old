@@ -25,7 +25,8 @@ class TestFileStorage(unittest.TestCase):
         self.assertTrue(rd)
         wr = os.access('models/engine/file_storage.py', os.W_OK)
         self.assertTrue(wr)
-        
+        ex = os.access('models/engine/file_storage.py', os.X_OK)
+        self.assertTrue(ex)
 
     def test_new(self):
         """
@@ -75,7 +76,6 @@ class TestFileStorage(unittest.TestCase):
         for key in dict2:
             key2 = key
         self.assertEqual(dict1[key1].to_dict(), dict2[key2].to_dict())
-
 
 
 if __name__ == '__main__':
