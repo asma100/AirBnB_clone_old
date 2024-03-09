@@ -65,12 +65,13 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** instance id is missing **")
             return
+        if args[0] not in HBNBCommand.classes:
+            if len(args) >= 2:
+                print("** no instance found **")
         if args[0] in HBNBCommand.classes:
             dict = storage.all()
             if len(args) >= 2:
                 key = args[0] + '.' + args[1]
-                if key is None:
-                    return
                 if key in dict:
                     print(storage.all()[key])
                 else:
