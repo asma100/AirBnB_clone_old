@@ -2,6 +2,7 @@
 """test City class""""
 import unittest
 from models.city import City
+from datetime import datetime 
 class TestAmenity(unittest.TestCase):
     """
     Test class for the City class
