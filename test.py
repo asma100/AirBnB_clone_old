@@ -16,6 +16,8 @@ class TestAmenity(unittest.TestCase):
         """
         self.amenity.name = "name"
         self.assertEqual(self.amenity.name, "name")
+    def test_name_at_start (self):
+        self.assertEqual(self.amenity.name, "")
     def test_name_str(self):
         """
         Test if the Amenity class is stringified properly
