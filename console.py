@@ -67,7 +67,7 @@ class HBNBCommand(cmd.Cmd):
             return
         if args[0] not in HBNBCommand.classes:
             if len(args) >= 2:
-                print("** no instance found **")
+                print("** no instance found")
         if args[0] in HBNBCommand.classes:
             dict = storage.all()
             if len(args) >= 2:
@@ -83,11 +83,11 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split()
         if not args:
             print("** class name missing **")
-        if len(args) == 1:
-                print("** instance id missing **")
+        elif len(args) == 1:
+            print("** instance id missing **")
         else:
             class_name, instance_id = args[0], args[1]
-            if class_name not in HBNBCommand.classes:
+            if args[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
             key = f"{class_name}.{instance_id}"
