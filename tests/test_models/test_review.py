@@ -30,4 +30,4 @@ class TestReview(unittest.TestCase):
     def test_text_str(self):
       """Test if the text attribute is stringified properly."""
       self.assertEqual(str, type(self.review.text))
-      d
+      
