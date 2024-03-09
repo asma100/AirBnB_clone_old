@@ -101,27 +101,37 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """Updates an instance based on the class name and id"""
         args = arg.split()
-        if len(args) == 0:
-            print("** class name missing **")
-        if len(args) == 1:
-            print("** instance id is missing **")
-        if len(args) == 2:
-            print("** attribute name missing **")
-        if len(args) == 3:
-            print("** value missing **")
-        if len(args) == 4:
-            class_name, instance_id, attr_name, attr_value = args[:4]
-            if class_name in HBNBCommand.classes:
-                dictionary = storage.all()
-                if len(args) >= 2:
-                    key = class_name + '.' + instance_id
-                    if key in dictionary:
-                        dictionary[key].__dict__[attr_name] = attr_value
-                        dictionary[key].save()
-                    else:
-                        print("** no instance found **")
-            else:
-                print("** class doesn't exist **")
+        if len(args) != 5:
+            print("Usage: update <class name> <id> <attribute name> \"<attribute value>\"")
+            return
+
+        class_name, instance_id, attr_name, attr_value = args[:4]
+        if class_name not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+
+        key = f"{class_name}.{instance_id}"
+        obj_dict = storage.all()
+        if key not in obj_dict:
+            print("** no instance found **")
+            return
+
+        if attr_name in ["id", "created_at", "updated_at"]:
+            print("** can't update id, created_at, or updated_at **")
+            return
+
+        instance = obj_dict[key]
+        if not hasattr(instance, attr_name):
+            print(f"** attribute '{attr_name}' doesn't exist for {class_name} **")
+            return
+
+        try:
+            setattr(instance, attr_name, eval(attr_value))
+            instance.save()
+        except:
+            print(f"** can't cast value '{attr_value}' to the appropriate type **")
+
+
 
     def do_all(self, arg):
         """Prints all string representation of all instances"""
