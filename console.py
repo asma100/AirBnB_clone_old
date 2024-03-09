@@ -101,36 +101,45 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """Updates an instance based on the class name and id"""
         args = arg.split()
-        if len(args) != 5:
-            print("Usage: update <class name> <id> <attribute name> \"<attribute value>\"")
+        if len(args) < 2:
+            print("** class name missing **")
             return
-
-        class_name, instance_id, attr_name, attr_value = args[:4]
+        class_name = args[0]
         if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-
-        key = f"{class_name}.{instance_id}"
-        obj_dict = storage.all()
-        if key not in obj_dict:
+        if len(args) < 3:
+            print("** instance id missing **")
+            return
+        instance_id = args[1]
+        key = class_name + '.' + instance_id
+        dictionary = storage.all()
+        if key not in dictionary:
             print("** no instance found **")
             return
-
-        if attr_name in ["id", "created_at", "updated_at"]:
-            print("** can't update id, created_at, or updated_at **")
+        if len(args) < 4:
+            print("** attribute name missing **")
             return
-
-        instance = obj_dict[key]
+        attr_name = args[2]
+        if len(args) < 5:
+            print("** value missing **")
+            return
+        attr_value_str = args[3]
+        instance = dictionary[key]
+        if attr_name in ['id', 'created_at', 'updated_at']:
+            print("** can't update id, created_at or updated_at **")
+            return
         if not hasattr(instance, attr_name):
             print(f"** attribute '{attr_name}' doesn't exist for {class_name} **")
             return
-
+        attr_type = type(getattr(instance, attr_name))
         try:
-            setattr(instance, attr_name, eval(attr_value))
-            instance.save()
-        except:
-            print(f"** can't cast value '{attr_value}' to the appropriate type **")
-
+            attr_value = attr_type(attr_value_str)
+        except ValueError:
+            print(f"** can't cast value '{attr_value_str}' to {attr_type} **")
+            return
+        setattr(instance, attr_name, attr_value)
+        instance.save()
 
 
     def do_all(self, arg):
