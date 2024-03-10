@@ -28,21 +28,23 @@ class HBNBCommand(cmd.Cmd):
                "Review"]
 
     def default(self, line):
-        args = line.split('.')
-        cls_name = args[0]
-        command = args[1].split('(')
-        method = command[0]
+        """Default behavior of the console."""
+        try:
+            args = line.split('.')
+            cls_name = args[0]
+            command = args[1].split('(')
+            method = command[0]
 
-        methods = {
-            'all': self.do_all,
-            'show': self.do_show,
-            'count': self.do_count
-        }
+            methods = {
+                'all': self.do_all,
+                'show': self.do_show,
+                'count': self.do_count
+            }
 
-        if method in methods.keys():
-            return methods[method]("{} {}".format(cls_name, ''))
-        print("** unknown syntax **")
-        return False
+            if method in methods.keys():
+                return methods[method]("{} {}".format(cls_name, ''))
+        except IndexError:
+            print("*** Unkown syntax: {}".format(line))
 
     def do_quit(self, arg):
         """ Quit command to exit the program"""
@@ -53,7 +55,7 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
-    def emptyarg(self):
+    def emptyline(self):
         """passes empty args"""
         return
 
