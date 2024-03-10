@@ -27,6 +27,23 @@ class HBNBCommand(cmd.Cmd):
                "Place",
                "Review"]
 
+    def default(self, line):
+        args = line.split('.')
+        cls_name = args[0]
+        command = args[1].split('(')
+        method = command[0]
+
+        methods = {
+            'all':self.do_all,
+            'show': self.do_show,
+            'count': self.do_count
+        }
+
+        if method in methods.keys():
+            return methods[method]("{} {}".format(cls_name, ''))
+        print("** unknown syntax **")
+        return False
+
     def do_quit(self, arg):
         """ Quit command to exit the program"""
         return True
@@ -99,11 +116,7 @@ class HBNBCommand(cmd.Cmd):
 
 
     def do_update(self, arg):
-        """Usage: update <class> <id> <attribute_name> <attribute_value> or
-       <class>.update(<id>, <attribute_name>, <attribute_value>) or
-       <class>.update(<id>, <dictionary>)
-        Update a class instance of a given id by adding or updating
-        a given attribute key/value pair or dictionary."""
+        """Updates the values to keys of the class."""
         args = arg.split()
         objdict = storage.all()
 
@@ -138,13 +151,13 @@ class HBNBCommand(cmd.Cmd):
                 obj.__dict__[args[2]] = args[3]
         elif type(eval(args[2])) == dict:
             obj = objdict["{}.{}".format(args[0], args[1])]
-            for k, v in eval(args[2]).items():
-                if (k in obj.__class__.__dict__.keys() and
-                        type(obj.__class__.__dict__[k]) in {str, int, float}):
-                    valtype = type(obj.__class__.__dict__[k])
-                    obj.__dict__[k] = valtype(v)
+            for key, v in eval(args[2]).items():
+                if (key in obj.__class__.__dict__.keys() and
+                        type(obj.__class__.__dict__[key]) in {str, int, float}):
+                    valtype = type(obj.__class__.__dict__[key])
+                    obj.__dict__[key] = valtype(v)
                 else:
-                    obj.__dict__[k] = v
+                    obj.__dict__[key] = v
         storage.save()
 
     def do_all(self, arg):
@@ -164,18 +177,17 @@ class HBNBCommand(cmd.Cmd):
                     print("[]")
             else:
                 print("** class doesn't exist **")
+
     def do_count(self, arg):
         """Prints the number of instances of a class"""
         count = 0
         args = arg.split()
         classname = args[0]
 
-        # Check if class exists
         if classname not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
 
-        # Iterate through storage and count matching classes
         for i in storage.all().values():
             if i.__class__.__name__ == classname:
                 count += 1
