@@ -34,7 +34,7 @@ class HBNBCommand(cmd.Cmd):
         method = command[0]
 
         methods = {
-            'all':self.do_all,
+            'all': self.do_all,
             'show': self.do_show,
             'count': self.do_count
         }
@@ -90,7 +90,6 @@ class HBNBCommand(cmd.Cmd):
         else:
             print(obj_dict[key])
 
-
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id"""
         args = arg.split()
@@ -113,7 +112,6 @@ class HBNBCommand(cmd.Cmd):
                 storage.save()
             else:
                 print("** no instance found **")
-
 
     def do_update(self, arg):
         """Updates the values to keys of the class."""
@@ -153,7 +151,8 @@ class HBNBCommand(cmd.Cmd):
             obj = objdict["{}.{}".format(args[0], args[1])]
             for key, v in eval(args[2]).items():
                 if (key in obj.__class__.__dict__.keys() and
-                        type(obj.__class__.__dict__[key]) in {str, int, float}):
+                        type(obj.__class__.__dict__[key]) in {str,
+                                                              int, float}):
                     valtype = type(obj.__class__.__dict__[key])
                     obj.__dict__[key] = valtype(v)
                 else:
