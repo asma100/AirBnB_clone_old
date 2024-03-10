@@ -38,7 +38,9 @@ class HBNBCommand(cmd.Cmd):
             methods = {
                 'all': self.do_all,
                 'show': self.do_show,
-                'count': self.do_count
+                'count': self.do_count,
+                'update': self.do_update,
+                'destroy': self.do_destroy
             }
 
             if method in methods.keys():
@@ -183,18 +185,18 @@ class HBNBCommand(cmd.Cmd):
         """Prints the number of instances of a class"""
         count = 0
         args = arg.split()
-        classname = args[0]
-
-        if classname not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-
-        for i in storage.all().values():
-            if i.__class__.__name__ == classname:
-                count += 1
-
-        print(count)
-
+        if args:
+            classname = args[0]
+            if classname not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
+            if classname in HBNBCommand.classes:
+                for i in storage.all().values():
+                    if i.__class__.__name__ == classname:
+                        count += 1
+                print(count)
+        else:
+            print("** class name missing **")
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
