@@ -164,6 +164,15 @@ class HBNBCommand(cmd.Cmd):
                     print("[]")
             else:
                 print("** class doesn't exist **")
+    def do_count(self, arg):
+        """Prints the number of instances of a class"""
+        count= 0
+        args = arg.split()
+        classname= arg[0]
+        for i in   storage.all().values():
+            if classnmae in classes :
+                count +=1
+        print(count)
 
 
 if __name__ == '__main__':
